@@ -1,0 +1,38 @@
+{
+  "name": "react-simple-step-wizard",
+  "version": "0.0.1",
+  "description": "React simple step wizard",
+  "keywords": [
+    "react",
+    "wizard",
+    "step wizard"
+  ],
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "rm -rf ./lib && tsc",
+    "prepare": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonathanpalma/react-simple-step-wizard.git"
+  },
+  "author": "Jonathan Palma <tanpalma04@gmail.com> (http://jonathanpalma.me)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jonathanpalma/react-simple-step-wizard/issues"
+  },
+  "homepage": "https://github.com/jonathanpalma/react-simple-step-wizard#readme",
+  "peerDependencies": {
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.3",
+    "@types/react-dom": "^16.9.1",
+    "prettier": "^1.18.2",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "typescript": "^3.6.3"
+  }
+}
