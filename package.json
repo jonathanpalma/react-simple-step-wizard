@@ -1,6 +1,6 @@
 {
   "name": "react-simple-step-wizard",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "React simple step wizard",
   "keywords": [
     "react",
@@ -23,16 +23,12 @@
     "url": "https://github.com/jonathanpalma/react-simple-step-wizard/issues"
   },
   "homepage": "https://github.com/jonathanpalma/react-simple-step-wizard#readme",
-  "peerDependencies": {
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0"
-  },
   "devDependencies": {
     "@types/react": "^16.9.3",
     "@types/react-dom": "^16.9.1",
     "prettier": "^1.18.2",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
     "typescript": "^3.6.3"
   }
 }
