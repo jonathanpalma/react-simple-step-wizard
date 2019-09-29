@@ -80,6 +80,16 @@ class App extends Component {
 }
 ``` -->
 
+## Roadmap
+
+### V1
+
+Provide an accessible and composable API to be used with older react versions that don't support hooks.
+
+### V2
+
+Rewrite lib core and expose some of the APIs using react hooks.
+
 ## License
 
 ISC Licensed.
