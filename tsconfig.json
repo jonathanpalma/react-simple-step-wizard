@@ -20,5 +20,5 @@
     "target": "es5"
   },
   "include": ["./src/**/*.tsx", "./src/**/*.ts"],
-  "exclude": ["node_modules", "build", "lib", "rollup.config.js"]
+  "exclude": ["node_modules", "example", "lib", "rollup.config.js"]
 }
