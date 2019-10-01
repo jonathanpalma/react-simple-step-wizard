@@ -92,7 +92,7 @@ Rewrite lib core and expose some of the APIs using react hooks.
 
 ## License
 
-ISC © [jonathanpalma](https://github.com/jonathanpalma)
+MIT © [jonathanpalma](https://github.com/jonathanpalma)
 
 [downloads-badge]: https://img.shields.io/npm/dm/react-simple-step-wizard.svg?style=flat-square
 [license-badge]: https://img.shields.io/npm/l/react-simple-step-wizard.svg?style=flat-square

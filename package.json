@@ -23,7 +23,7 @@
     "url": "git+https://github.com/jonathanpalma/react-simple-step-wizard.git"
   },
   "author": "Jonathan Palma <tanpalma04@gmail.com> (http://jonathanpalma.me)",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/jonathanpalma/react-simple-step-wizard/issues"
   },
