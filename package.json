@@ -8,9 +8,12 @@
     "step wizard"
   ],
   "main": "lib/index.js",
+  "module": "lib/index.es.js",
+  "jsnext:main": "lib/index.es.js",
   "scripts": {
-    "build": "rm -rf ./lib && tsc",
+    "build": "rollup -c",
     "prepare": "npm run build",
+    "start": "rollup -c -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,12 +26,25 @@
     "url": "https://github.com/jonathanpalma/react-simple-step-wizard/issues"
   },
   "homepage": "https://github.com/jonathanpalma/react-simple-step-wizard#readme",
+  "peerDependencies": {
+    "react": "^16.3.0",
+    "react-dom": "^16.3.0"
+  },
   "devDependencies": {
+    "@svgr/rollup": "^4.3.3",
     "@types/react": "^16.9.3",
     "@types/react-dom": "^16.9.1",
     "prettier": "^1.18.2",
     "react": "^16.3.0",
     "react-dom": "^16.3.0",
+    "rollup": "^1.22.0",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-peer-deps-external": "^2.2.0",
+    "rollup-plugin-postcss": "^2.0.3",
+    "rollup-plugin-typescript2": "^0.24.3",
+    "rollup-plugin-url": "^2.2.2",
     "typescript": "^3.6.3"
   }
 }
