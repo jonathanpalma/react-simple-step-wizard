@@ -1,18 +1,47 @@
 import * as React from 'react';
 
-interface Props {
+interface WizardProps {
   children: JSX.Element[] | JSX.Element;
 }
 
-interface State {
+interface WizardState {
   currentStep: number;
   totalSteps: number;
 }
 
-class Wizard extends React.Component<Props, State> {
+interface NavigatorProps {
+  currentStep: number;
+  totalSteps: number;
+  goToPrevStep(): void;
+  goToNextStep(): void;
+}
+
+function DefaultNavigator({
+  currentStep,
+  totalSteps,
+  goToPrevStep,
+  goToNextStep,
+}: NavigatorProps): JSX.Element {
+  return (
+    <div>
+      <button type="button" onClick={goToPrevStep} disabled={currentStep === 0}>
+        Previous
+      </button>
+      <button
+        type="button"
+        onClick={goToNextStep}
+        disabled={currentStep === totalSteps - 1}
+      >
+        Next
+      </button>
+    </div>
+  );
+}
+
+class Wizard extends React.Component<WizardProps, WizardState> {
   state = { currentStep: 0, totalSteps: -1 };
 
-  static getDerivedStateFromProps(props: Props, state: State) {
+  static getDerivedStateFromProps(props: WizardProps, state: WizardState) {
     const totalSteps = React.Children.count(props.children);
     return totalSteps !== state.totalSteps ? { totalSteps } : null;
   }
@@ -39,22 +68,12 @@ class Wizard extends React.Component<Props, State> {
                   : null
             )
           : null}
-        <div className="wizard-navigator">
-          <button
-            type="button"
-            onClick={this.goToPrevStep}
-            disabled={currentStep === 0}
-          >
-            Previous
-          </button>
-          <button
-            type="button"
-            onClick={this.goToNextStep}
-            disabled={currentStep === totalSteps - 1}
-          >
-            Next
-          </button>
-        </div>
+        <DefaultNavigator
+          currentStep={currentStep}
+          totalSteps={totalSteps}
+          goToPrevStep={this.goToPrevStep}
+          goToNextStep={this.goToNextStep}
+        />
       </div>
     );
   }
