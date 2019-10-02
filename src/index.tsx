@@ -133,7 +133,13 @@ class Wizard extends React.Component<WizardProps, WizardState> {
   };
 
   static getDerivedStateFromProps(props: WizardProps, state: WizardState) {
-    const totalSteps = React.Children.count(props.children);
+    // TODO: should this be replaced for componentDidMount + setState?
+    let totalSteps = 0;
+    React.Children.forEach(props.children, (child: React.ReactElement) => {
+      if (child.type === Steps && child.props.children) {
+        totalSteps = child.props.children.length;
+      }
+    });
     return totalSteps !== state.totalSteps ? { totalSteps } : null;
   }
 
