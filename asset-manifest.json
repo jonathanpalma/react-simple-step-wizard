@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/react-simple-step-wizard/static/css/main.a2b7b0b6.chunk.css",
-    "main.js": "/react-simple-step-wizard/static/js/main.132ce632.chunk.js",
-    "main.js.map": "/react-simple-step-wizard/static/js/main.132ce632.chunk.js.map",
+    "main.js": "/react-simple-step-wizard/static/js/main.8f86b3ae.chunk.js",
+    "main.js.map": "/react-simple-step-wizard/static/js/main.8f86b3ae.chunk.js.map",
     "runtime-main.js": "/react-simple-step-wizard/static/js/runtime-main.e29c0391.js",
     "runtime-main.js.map": "/react-simple-step-wizard/static/js/runtime-main.e29c0391.js.map",
-    "static/js/2.d35888de.chunk.js": "/react-simple-step-wizard/static/js/2.d35888de.chunk.js",
-    "static/js/2.d35888de.chunk.js.map": "/react-simple-step-wizard/static/js/2.d35888de.chunk.js.map",
+    "static/js/2.3041137b.chunk.js": "/react-simple-step-wizard/static/js/2.3041137b.chunk.js",
+    "static/js/2.3041137b.chunk.js.map": "/react-simple-step-wizard/static/js/2.3041137b.chunk.js.map",
     "index.html": "/react-simple-step-wizard/index.html",
-    "precache-manifest.60c8ad13b0948c514a5da9ad9f9ab5d1.js": "/react-simple-step-wizard/precache-manifest.60c8ad13b0948c514a5da9ad9f9ab5d1.js",
+    "precache-manifest.7dbeaa71170a59fae33c4a9b5f2dc4e1.js": "/react-simple-step-wizard/precache-manifest.7dbeaa71170a59fae33c4a9b5f2dc4e1.js",
     "service-worker.js": "/react-simple-step-wizard/service-worker.js",
     "static/css/main.a2b7b0b6.chunk.css.map": "/react-simple-step-wizard/static/css/main.a2b7b0b6.chunk.css.map"
   }
