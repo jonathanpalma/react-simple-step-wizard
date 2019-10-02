@@ -14,11 +14,25 @@ class App extends Component {
       <div>
         <h1>react-simple-step-wizard demo</h1>
         <Wizard>
-          <Step1 />
-          <Step2 />
-          <Step3 />
-          <Step4 />
-          <Step5 />
+          <Wizard.Steps>
+            <Step1 />
+            <Step2 />
+            <Step3 />
+            <Step4 />
+            <Step5 />
+          </Wizard.Steps>
+          <Wizard.Navigator>
+            {({ nextStep, prevStep }) => (
+              <div>
+                <button type="button" onClick={prevStep}>
+                  Go Back
+                </button>
+                <button type="button" onClick={nextStep}>
+                  Go Next
+                </button>
+              </div>
+            )}
+          </Wizard.Navigator>
         </Wizard>
       </div>
     );
