@@ -82,13 +82,13 @@ function DefaultNavigator({
 }: NavigatorProps): JSX.Element {
   return (
     <div>
-      <button type="button" onClick={prevStep} disabled={currentStep === 0}>
+      <button type="button" onClick={prevStep} disabled={currentStep <= 0}>
         Previous
       </button>
       <button
         type="button"
         onClick={nextStep}
-        disabled={currentStep === totalSteps - 1}
+        disabled={currentStep >= totalSteps - 1}
       >
         Next
       </button>
@@ -108,10 +108,29 @@ function Steps({ children }: StepsProps): JSX.Element {
   return <div>{children}</div>;
 }
 
+const WizardPropTypes = {
+  children(props: WizardProps, propName: string, componentName: string) {
+    let error = null;
+    React.Children.forEach(props[propName], (child: React.ReactElement) => {
+      if (![Navigator, Steps].some(component => component === child.type)) {
+        error = new Error(
+          `${componentName} children should only include components of types Wizard.Navigator or Wizard.Steps`
+        );
+      }
+    });
+    return error;
+  },
+};
+
 class Wizard extends React.Component<WizardProps, WizardState> {
   // compound components
   static Navigator = Navigator;
   static Steps = Steps;
+
+  // custom prop-types (this will be removed in v2)
+  static propTypes = {
+    children: WizardPropTypes.children,
+  };
 
   static getDerivedStateFromProps(props: WizardProps, state: WizardState) {
     const totalSteps = React.Children.count(props.children);
@@ -119,42 +138,28 @@ class Wizard extends React.Component<WizardProps, WizardState> {
   }
 
   nextStep = (): void => {
-    this.setState(prevState => ({ currentStep: prevState.currentStep + 1 }));
+    if (this.state.currentStep < this.state.totalSteps - 1)
+      this.setState(prevState => ({ currentStep: prevState.currentStep + 1 }));
   };
 
   prevStep = (): void => {
-    this.setState(prevState => ({ currentStep: prevState.currentStep - 1 }));
+    if (this.state.currentStep > 0)
+      this.setState(prevState => ({ currentStep: prevState.currentStep - 1 }));
   };
 
   // Preventing unnecessary re-renders
   state = {
     currentStep: 0,
-    totalSteps: -1,
+    totalSteps: 0,
     nextStep: this.nextStep,
     prevStep: this.prevStep,
-    compounComponents: [Navigator, Steps],
   };
 
   render() {
-    const { children } = this.props;
-    const { compounComponents, ...context } = this.state;
     return (
       <div>
-        <WizardContext.Provider value={context}>
-          {React.Children.map(
-            children,
-            (child: React.ReactElement) => {
-              if (
-                !compounComponents.some(
-                  component => component === child.type
-                )
-              )
-                throw new Error(
-                  'You can only use compound components within the Wizard component'
-                );
-              return React.cloneElement(child, {});
-            }
-          )}
+        <WizardContext.Provider value={this.state}>
+          {this.props.children}
         </WizardContext.Provider>
       </div>
     );
