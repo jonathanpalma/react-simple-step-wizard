@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Subtract } from 'utility-types';
 
 interface WizardProps {
   children: JSX.Element[] | JSX.Element;
@@ -9,71 +10,113 @@ interface WizardState {
   totalSteps: number;
 }
 
-interface NavigatorProps {
+interface WizardContextState {
   currentStep: number;
   totalSteps: number;
-  goToPrevStep(): void;
-  goToNextStep(): void;
+  prevStep(): void;
+  nextStep(): void;
 }
 
-function DefaultNavigator({
-  currentStep,
-  totalSteps,
-  goToPrevStep,
-  goToNextStep,
-}: NavigatorProps): JSX.Element {
+interface WizardConsumerProps {
+  children(args: WizardContextState): JSX.Element;
+}
+
+const WizardContext = React.createContext<WizardContextState>(
+  {} as WizardContextState
+);
+
+// providing wizard context using render-props
+export function WizardConsumer({ children }: WizardConsumerProps): JSX.Element {
   return (
-    <div>
-      <button type="button" onClick={goToPrevStep} disabled={currentStep === 0}>
-        Previous
-      </button>
-      <button
-        type="button"
-        onClick={goToNextStep}
-        disabled={currentStep === totalSteps - 1}
-      >
-        Next
-      </button>
-    </div>
+    <WizardContext.Consumer>
+      {context => {
+        if (
+          Object.entries(context).length === 0 &&
+          context.constructor === Object
+        ) {
+          throw new Error(
+            'Components using WizardContext must be rendered within the Wizard component'
+          );
+        }
+        return children(context);
+      }}
+    </WizardContext.Consumer>
+  );
+}
+
+// providing wizard context using higher-order component
+export function withWizardContext<T extends WizardContextState>(
+  WrappedComponent: React.ComponentType<T>
+) {
+  return class extends React.Component<Subtract<T, WizardContextState>> {
+    render() {
+      return (
+        <WizardConsumer>
+          {context => <WrappedComponent {...(context as T)} />}
+        </WizardConsumer>
+      );
+    }
+  };
+}
+
+function DefaultNavigator(): JSX.Element {
+  return (
+    <WizardConsumer>
+      {({ currentStep, totalSteps, prevStep, nextStep }) => (
+        <div>
+          <button type="button" onClick={prevStep} disabled={currentStep === 0}>
+            Previous
+          </button>
+          <button
+            type="button"
+            onClick={nextStep}
+            disabled={currentStep === totalSteps - 1}
+          >
+            Next
+          </button>
+        </div>
+      )}
+    </WizardConsumer>
   );
 }
 
 class Wizard extends React.Component<WizardProps, WizardState> {
-  state = { currentStep: 0, totalSteps: -1 };
-
   static getDerivedStateFromProps(props: WizardProps, state: WizardState) {
     const totalSteps = React.Children.count(props.children);
     return totalSteps !== state.totalSteps ? { totalSteps } : null;
   }
 
-  goToNextStep = (): void => {
+  nextStep = (): void => {
     this.setState(prevState => ({ currentStep: prevState.currentStep + 1 }));
   };
 
-  goToPrevStep = (): void => {
+  prevStep = (): void => {
     this.setState(prevState => ({ currentStep: prevState.currentStep - 1 }));
   };
 
+  // Preveting unnecessary re-renders
+  state = {
+    currentStep: 0,
+    totalSteps: -1,
+    nextStep: this.nextStep,
+    prevStep: this.prevStep,
+  };
+
   render() {
-    const { children } = this.props;
-    const { currentStep, totalSteps } = this.state;
     return (
       <div>
-        {totalSteps > 0
-          ? React.Children.map(
-              children,
-              (childElement: React.ReactElement, index) =>
-                currentStep === index
-                  ? React.cloneElement(childElement, {})
-                  : null
-            )
-          : null}
-        <DefaultNavigator
-          currentStep={currentStep}
-          totalSteps={totalSteps}
-          goToPrevStep={this.goToPrevStep}
-          goToNextStep={this.goToNextStep}
-        />
+        <WizardContext.Provider value={this.state}>
+          {this.state.totalSteps > 0
+            ? React.Children.map(
+                this.props.children,
+                (childElement: React.ReactElement, index) =>
+                  this.state.currentStep === index
+                    ? React.cloneElement(childElement, {})
+                    : null
+              )
+            : null}
+          <DefaultNavigator />
+        </WizardContext.Provider>
       </div>
     );
   }

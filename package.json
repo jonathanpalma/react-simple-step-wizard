@@ -48,6 +48,7 @@
     "rollup-plugin-postcss": "^2.0.3",
     "rollup-plugin-typescript2": "^0.24.3",
     "rollup-plugin-url": "^2.2.2",
-    "typescript": "^3.6.3"
+    "typescript": "^3.6.3",
+    "utility-types": "^3.8.0"
   }
 }
