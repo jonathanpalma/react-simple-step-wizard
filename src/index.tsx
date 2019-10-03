@@ -3,6 +3,7 @@ import { Subtract } from 'utility-types';
 
 interface WizardProps {
   children: JSX.Element[] | JSX.Element;
+  onStepChange?: (currentStep: number) => void;
 }
 
 interface WizardState {
@@ -159,28 +160,33 @@ class Wizard extends React.PureComponent<WizardProps, WizardState> {
     };
   }
 
+  componentDidUpdate(_: WizardProps, prevState: WizardState) {
+    const { currentStep, totalSteps } = this.state;
+    if (prevState.currentStep !== currentStep)
+      this.setState(
+        {
+          isNextAvailable: currentStep < totalSteps - 1,
+          isPrevAvailable: currentStep > 0,
+        },
+        () => {
+          const { onStepChange } = this.props;
+          if (onStepChange) onStepChange(currentStep);
+        }
+      );
+  }
+
   nextStep = (): void => {
     if (this.state.isNextAvailable)
-      this.setState(prevState => {
-        const currentStep = prevState.currentStep + 1;
-        return {
-          isNextAvailable: Boolean(currentStep < prevState.totalSteps - 1),
-          isPrevAvailable: Boolean(currentStep > 0),
-          currentStep,
-        };
-      });
+      this.setState(prevState => ({
+        currentStep: prevState.currentStep + 1,
+      }));
   };
 
   prevStep = (): void => {
     if (this.state.isPrevAvailable)
-      this.setState(prevState => {
-        const currentStep = prevState.currentStep - 1;
-        return {
-          isNextAvailable: Boolean(currentStep < prevState.totalSteps - 1),
-          isPrevAvailable: Boolean(currentStep > 0),
-          currentStep,
-        };
-      });
+      this.setState(prevState => ({
+        currentStep: prevState.currentStep - 1,
+      }));
   };
 
   render() {
