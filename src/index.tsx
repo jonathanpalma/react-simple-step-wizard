@@ -8,11 +8,15 @@ interface WizardProps {
 interface WizardState {
   currentStep: number;
   totalSteps: number;
+  isNextAvailable: boolean;
+  isPrevAvailable: boolean;
+  prevStep(): void;
+  nextStep(): void;
 }
 
 export interface NavigatorProps {
-  currentStep: number;
-  totalSteps: number;
+  isNextAvailable: boolean;
+  isPrevAvailable: boolean;
   prevStep(): void;
   nextStep(): void;
 }
@@ -25,20 +29,11 @@ interface StepsProps {
   children: JSX.Element[] | JSX.Element;
 }
 
-interface WizardContextState {
-  currentStep: number;
-  totalSteps: number;
-  prevStep(): void;
-  nextStep(): void;
-}
-
 interface WizardConsumerProps {
-  children(args: WizardContextState): JSX.Element;
+  children(args: WizardState): JSX.Element;
 }
 
-const WizardContext = React.createContext<WizardContextState>(
-  {} as WizardContextState
-);
+const WizardContext = React.createContext<WizardState>({} as WizardState);
 
 // providing wizard context using render-props
 export function WizardConsumer({ children }: WizardConsumerProps): JSX.Element {
@@ -60,10 +55,10 @@ export function WizardConsumer({ children }: WizardConsumerProps): JSX.Element {
 }
 
 // providing wizard context using higher-order component
-export function withWizardContext<T extends WizardContextState>(
+export function withWizardContext<T extends WizardState>(
   WrappedComponent: React.ComponentType<T>
 ) {
-  return class extends React.Component<Subtract<T, WizardContextState>> {
+  return class extends React.Component<Subtract<T, WizardState>> {
     render() {
       return (
         <WizardConsumer>
@@ -75,21 +70,17 @@ export function withWizardContext<T extends WizardContextState>(
 }
 
 function DefaultNavigator({
-  currentStep,
-  totalSteps,
-  prevStep,
+  isNextAvailable,
+  isPrevAvailable,
   nextStep,
+  prevStep,
 }: NavigatorProps): JSX.Element {
   return (
     <div>
-      <button type="button" onClick={prevStep} disabled={currentStep <= 0}>
+      <button type="button" onClick={prevStep} disabled={!isPrevAvailable}>
         Previous
       </button>
-      <button
-        type="button"
-        onClick={nextStep}
-        disabled={currentStep >= totalSteps - 1}
-      >
+      <button type="button" onClick={nextStep} disabled={!isNextAvailable}>
         Next
       </button>
     </div>
@@ -105,7 +96,20 @@ function Navigator({ children }: CustomNavigatorProps): JSX.Element {
 }
 
 function Steps({ children }: StepsProps): JSX.Element {
-  return <div>{children}</div>;
+  return (
+    // TODO: fix types error to allow using WizardConsumer instead of WizardContext.Consumer
+    <WizardContext.Consumer>
+      {context =>
+        context.totalSteps > 0
+          ? React.Children.map(children, (child: React.ReactElement, index) =>
+              context.currentStep === index
+                ? React.cloneElement(child, {})
+                : null
+            )
+          : null
+      }
+    </WizardContext.Consumer>
+  );
 }
 
 const WizardPropTypes = {
@@ -122,7 +126,7 @@ const WizardPropTypes = {
   },
 };
 
-class Wizard extends React.Component<WizardProps, WizardState> {
+class Wizard extends React.PureComponent<WizardProps, WizardState> {
   // compound components
   static Navigator = Navigator;
   static Steps = Steps;
@@ -132,33 +136,51 @@ class Wizard extends React.Component<WizardProps, WizardState> {
     children: WizardPropTypes.children,
   };
 
-  static getDerivedStateFromProps(props: WizardProps, state: WizardState) {
-    // TODO: should this be replaced for componentDidMount + setState?
+  constructor(props: WizardProps) {
+    super(props);
     let totalSteps = 0;
     React.Children.forEach(props.children, (child: React.ReactElement) => {
       if (child.type === Steps && child.props.children) {
         totalSteps = child.props.children.length;
       }
     });
-    return totalSteps !== state.totalSteps ? { totalSteps } : null;
+    const currentStep = 0;
+    const isNextAvailable = currentStep < totalSteps - 1;
+    const isPrevAvailable = currentStep > 0;
+
+    // Preventing unnecessary re-renders
+    this.state = {
+      currentStep,
+      totalSteps,
+      isNextAvailable,
+      isPrevAvailable,
+      nextStep: this.nextStep,
+      prevStep: this.prevStep,
+    };
   }
 
   nextStep = (): void => {
-    if (this.state.currentStep < this.state.totalSteps - 1)
-      this.setState(prevState => ({ currentStep: prevState.currentStep + 1 }));
+    if (this.state.isNextAvailable)
+      this.setState(prevState => {
+        const currentStep = prevState.currentStep + 1;
+        return {
+          isNextAvailable: Boolean(currentStep < prevState.totalSteps - 1),
+          isPrevAvailable: Boolean(currentStep > 0),
+          currentStep,
+        };
+      });
   };
 
   prevStep = (): void => {
-    if (this.state.currentStep > 0)
-      this.setState(prevState => ({ currentStep: prevState.currentStep - 1 }));
-  };
-
-  // Preventing unnecessary re-renders
-  state = {
-    currentStep: 0,
-    totalSteps: 0,
-    nextStep: this.nextStep,
-    prevStep: this.prevStep,
+    if (this.state.isPrevAvailable)
+      this.setState(prevState => {
+        const currentStep = prevState.currentStep - 1;
+        return {
+          isNextAvailable: Boolean(currentStep < prevState.totalSteps - 1),
+          isPrevAvailable: Boolean(currentStep > 0),
+          currentStep,
+        };
+      });
   };
 
   render() {

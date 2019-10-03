@@ -14,6 +14,7 @@ class App extends Component {
       <div>
         <h1>react-simple-step-wizard demo</h1>
         <Wizard>
+          <Wizard.Navigator />
           <Wizard.Steps>
             <Step1 />
             <Step2 />
@@ -22,13 +23,22 @@ class App extends Component {
             <Step5 />
           </Wizard.Steps>
           <Wizard.Navigator>
-            {({ nextStep, prevStep }) => (
+            {({ isNextAvailable, isPrevAvailable, nextStep, prevStep }) => (
               <div>
-                <button type="button" onClick={prevStep}>
-                  Go Back
+                <p>I am a custom Navigator</p>
+                <button
+                  type="button"
+                  onClick={prevStep}
+                  disabled={!isPrevAvailable}
+                >
+                  &lt; Back
                 </button>
-                <button type="button" onClick={nextStep}>
-                  Go Next
+                <button
+                  type="button"
+                  onClick={nextStep}
+                  disabled={!isNextAvailable}
+                >
+                  Next &gt;
                 </button>
               </div>
             )}
