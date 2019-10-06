@@ -3,13 +3,13 @@ import Navigator from './Navigator';
 import StepTracker from './StepTracker';
 import Steps from './Steps';
 import WizardContext from '../contexts/WizardContext';
-import { WizardProps, WizardState } from '../common/types';
+import { WizardProps, WizardState, WizardHandlers } from '../common/types';
 
 const WizardPropTypes = {
   children(props: WizardProps, propName: string, componentName: string) {
     let error = null;
     React.Children.forEach(props[propName], (child: React.ReactElement) => {
-      if (![Navigator, Steps].some(component => component === child.type)) {
+      if (![Navigator, StepTracker, Steps].some(component => component === child.type)) {
         error = new Error(
           `${componentName} children should only include components of types Wizard.Navigator or Wizard.Steps`
         );
@@ -17,6 +17,34 @@ const WizardPropTypes = {
     });
     return error;
   },
+};
+
+const getInitialState = (
+  props: WizardProps,
+  handlers: WizardHandlers
+): WizardState => {
+  let totalSteps = 0;
+  let steps: string[] = [];
+  React.Children.forEach(props.children, child => {
+    if (child.type === Steps && child.props.children) {
+      totalSteps = child.props.children.length;
+      React.Children.forEach(child.props.children, step => {
+        steps = steps.concat(step.props.stepLabel);
+      });
+    }
+  });
+  const currentStep = 0;
+  const isNextAvailable = currentStep < totalSteps - 1;
+  const isPrevAvailable = currentStep > 0;
+  const state = {
+    steps,
+    currentStep,
+    totalSteps,
+    isNextAvailable,
+    isPrevAvailable,
+  };
+
+  return { ...state, ...handlers };
 };
 
 class Wizard extends React.PureComponent<WizardProps, WizardState> {
@@ -29,34 +57,6 @@ class Wizard extends React.PureComponent<WizardProps, WizardState> {
   static propTypes = {
     children: WizardPropTypes.children,
   };
-
-  constructor(props: WizardProps) {
-    super(props);
-    let totalSteps = 0;
-    let steps: string[] = [];
-    React.Children.forEach(props.children, child => {
-      if (child.type === Steps && child.props.children) {
-        totalSteps = child.props.children.length;
-        React.Children.forEach(child.props.children, step => {
-          steps = steps.concat(step.props.stepLabel);
-        });
-      }
-    });
-    const currentStep = 0;
-    const isNextAvailable = currentStep < totalSteps - 1;
-    const isPrevAvailable = currentStep > 0;
-
-    // Preventing unnecessary re-renders
-    this.state = {
-      steps,
-      currentStep,
-      totalSteps,
-      isNextAvailable,
-      isPrevAvailable,
-      nextStep: this.nextStep,
-      prevStep: this.prevStep,
-    };
-  }
 
   componentDidUpdate(_: WizardProps, prevState: WizardState) {
     const { currentStep, totalSteps } = this.state;
@@ -86,6 +86,12 @@ class Wizard extends React.PureComponent<WizardProps, WizardState> {
         currentStep: prevState.currentStep - 1,
       }));
   };
+
+  // preventing unnecessary re-renders
+  state = getInitialState(this.props, {
+    nextStep: this.nextStep,
+    prevStep: this.prevStep,
+  });
 
   render() {
     return (

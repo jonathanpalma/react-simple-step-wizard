@@ -13,6 +13,11 @@ export interface WizardState {
   nextStep(): void;
 }
 
+export interface WizardHandlers {
+  prevStep(): void;
+  nextStep(): void;
+}
+
 export interface NavigatorProps {
   isNextAvailable: boolean;
   isPrevAvailable: boolean;
