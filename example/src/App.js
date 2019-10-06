@@ -49,6 +49,7 @@ class App extends Component {
             <Step4 stepLabel="Review" />
             <Step5 stepLabel="Submit" />
           </Wizard.Steps>
+          {/* You can implement your custom components via render-props */}
           <Wizard.StepTracker>
             {stepTrackerProps => <MyStepStracker {...stepTrackerProps} />}
           </Wizard.StepTracker>
