@@ -7,6 +7,7 @@ interface WizardProps {
 }
 
 interface WizardState {
+  steps: string[];
   currentStep: number;
   totalSteps: number;
   isNextAvailable: boolean;
@@ -24,6 +25,15 @@ export interface NavigatorProps {
 
 interface CustomNavigatorProps {
   children?: (args: NavigatorProps) => JSX.Element;
+}
+
+interface StepTrackerProps {
+  currentStep: number;
+  steps: string[];
+}
+
+interface CustomStepTrackerProps {
+  children?: (args: StepTrackerProps) => JSX.Element;
 }
 
 interface StepsProps {
@@ -88,10 +98,60 @@ function DefaultNavigator({
   );
 }
 
+function DefaultStepTracker({
+  currentStep = 0,
+  steps = [],
+}: StepTrackerProps): JSX.Element {
+  return (
+    <div style={{ display: 'block', padding: '25px' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}
+      >
+        {steps.map((step, index) => (
+          <div key={index} style={{ display: 'block', textAlign: 'center' }}>
+            <span
+              style={{
+                display: 'inline-block',
+                borderRadius: '50%',
+                lineHeight: '2rem',
+                height: '30px',
+                width: '30px',
+                border: '0.1rem solid #ff161b',
+                background:
+                  currentStep >= index
+                    ? 'linear-gradient(#ff161b,#ff009a)'
+                    : 'white',
+                color: 'white',
+              }}
+            >
+              {currentStep > index ? '✓' : null}
+            </span>
+            <div>
+              <span>{step ? `${index + 1}. ${step}` : ''}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function Navigator({ children }: CustomNavigatorProps): JSX.Element {
   return (
     <WizardConsumer>
       {context => (children ? children(context) : DefaultNavigator(context))}
+    </WizardConsumer>
+  );
+}
+
+function StepTracker({ children }: CustomStepTrackerProps): JSX.Element {
+  return (
+    <WizardConsumer>
+      {context => (children ? children(context) : DefaultStepTracker(context))}
     </WizardConsumer>
   );
 }
@@ -130,9 +190,10 @@ const WizardPropTypes = {
 class Wizard extends React.PureComponent<WizardProps, WizardState> {
   // compound components
   static Navigator = Navigator;
+  static StepTracker = StepTracker;
   static Steps = Steps;
 
-  // custom prop-types (this will be removed in v2)
+  // custom prop-types
   static propTypes = {
     children: WizardPropTypes.children,
   };
@@ -140,9 +201,13 @@ class Wizard extends React.PureComponent<WizardProps, WizardState> {
   constructor(props: WizardProps) {
     super(props);
     let totalSteps = 0;
-    React.Children.forEach(props.children, (child: React.ReactElement) => {
+    let steps: string[] = [];
+    React.Children.forEach(props.children, child => {
       if (child.type === Steps && child.props.children) {
         totalSteps = child.props.children.length;
+        React.Children.forEach(child.props.children, step => {
+          steps = steps.concat(step.props.stepLabel);
+        });
       }
     });
     const currentStep = 0;
@@ -151,6 +216,7 @@ class Wizard extends React.PureComponent<WizardProps, WizardState> {
 
     // Preventing unnecessary re-renders
     this.state = {
+      steps,
       currentStep,
       totalSteps,
       isNextAvailable,
@@ -175,14 +241,14 @@ class Wizard extends React.PureComponent<WizardProps, WizardState> {
       );
   }
 
-  nextStep = (): void => {
+  nextStep = () => {
     if (this.state.isNextAvailable)
       this.setState(prevState => ({
         currentStep: prevState.currentStep + 1,
       }));
   };
 
-  prevStep = (): void => {
+  prevStep = () => {
     if (this.state.isPrevAvailable)
       this.setState(prevState => ({
         currentStep: prevState.currentStep - 1,
