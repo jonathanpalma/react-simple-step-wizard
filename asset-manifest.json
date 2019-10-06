@@ -1,15 +1,21 @@
 {
   "files": {
     "main.css": "/react-simple-step-wizard/static/css/main.a2b7b0b6.chunk.css",
-    "main.js": "/react-simple-step-wizard/static/js/main.c0d1f1c2.chunk.js",
-    "main.js.map": "/react-simple-step-wizard/static/js/main.c0d1f1c2.chunk.js.map",
-    "runtime-main.js": "/react-simple-step-wizard/static/js/runtime-main.e29c0391.js",
-    "runtime-main.js.map": "/react-simple-step-wizard/static/js/runtime-main.e29c0391.js.map",
-    "static/js/2.3041137b.chunk.js": "/react-simple-step-wizard/static/js/2.3041137b.chunk.js",
-    "static/js/2.3041137b.chunk.js.map": "/react-simple-step-wizard/static/js/2.3041137b.chunk.js.map",
+    "main.js": "/react-simple-step-wizard/static/js/main.92dbca97.chunk.js",
+    "main.js.map": "/react-simple-step-wizard/static/js/main.92dbca97.chunk.js.map",
+    "runtime-main.js": "/react-simple-step-wizard/static/js/runtime-main.9c956372.js",
+    "runtime-main.js.map": "/react-simple-step-wizard/static/js/runtime-main.9c956372.js.map",
+    "static/js/2.a17e0104.chunk.js": "/react-simple-step-wizard/static/js/2.a17e0104.chunk.js",
+    "static/js/2.a17e0104.chunk.js.map": "/react-simple-step-wizard/static/js/2.a17e0104.chunk.js.map",
     "index.html": "/react-simple-step-wizard/index.html",
-    "precache-manifest.a9b1d7af3c64b98c32139c47ee3285f4.js": "/react-simple-step-wizard/precache-manifest.a9b1d7af3c64b98c32139c47ee3285f4.js",
+    "precache-manifest.84f4fcd1fa04ec71baceccdbf2a102a8.js": "/react-simple-step-wizard/precache-manifest.84f4fcd1fa04ec71baceccdbf2a102a8.js",
     "service-worker.js": "/react-simple-step-wizard/service-worker.js",
     "static/css/main.a2b7b0b6.chunk.css.map": "/react-simple-step-wizard/static/css/main.a2b7b0b6.chunk.css.map"
-  }
+  },
+  "entrypoints": [
+    "static/js/runtime-main.9c956372.js",
+    "static/js/2.a17e0104.chunk.js",
+    "static/css/main.a2b7b0b6.chunk.css",
+    "static/js/main.92dbca97.chunk.js"
+  ]
 }
