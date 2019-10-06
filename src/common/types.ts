@@ -1,9 +1,9 @@
-export interface WizardProps {
+export declare interface WizardProps {
   children: JSX.Element[] | JSX.Element;
   onStepChange?: (currentStep: number) => void;
 }
 
-export interface WizardState {
+export declare interface WizardState {
   steps: string[];
   currentStep: number;
   totalSteps: number;
@@ -13,35 +13,35 @@ export interface WizardState {
   nextStep(): void;
 }
 
-export interface WizardHandlers {
+export declare interface WizardHandlers {
   prevStep(): void;
   nextStep(): void;
 }
 
-export interface NavigatorProps {
+export declare interface NavigatorProps {
   isNextAvailable: boolean;
   isPrevAvailable: boolean;
   prevStep(): void;
   nextStep(): void;
 }
 
-export interface CustomNavigatorProps {
+export declare interface CustomNavigatorProps {
   children?: (props: NavigatorProps) => JSX.Element;
 }
 
-export interface StepTrackerProps {
+export declare interface StepTrackerProps {
   currentStep: number;
   steps: string[];
 }
 
-export interface CustomStepTrackerProps {
+export declare interface CustomStepTrackerProps {
   children?: (props: StepTrackerProps) => JSX.Element;
 }
 
-export interface StepsProps {
+export declare interface StepsProps {
   children: JSX.Element[] | JSX.Element;
 }
 
-export interface WizardConsumerProps {
+export declare interface WizardConsumerProps {
   children(props: WizardState): JSX.Element;
 }

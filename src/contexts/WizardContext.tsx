@@ -27,7 +27,16 @@ export function WizardConsumer({ children }: WizardConsumerProps): JSX.Element {
 export function withWizardContext<T extends WizardState>(
   WrappedComponent: React.ComponentType<T>
 ) {
+  const getDisplayName = (wrappedComponent: React.ComponentType<T>) => {
+    return wrappedComponent.displayName || wrappedComponent.name || 'Component';
+  };
+
+  // eslint-disable-next-line react/prefer-stateless-function
   return class extends React.Component<Subtract<T, WizardState>> {
+    static displayName = `WithWizardContext(${getDisplayName(
+      WrappedComponent
+    )})`;
+
     render() {
       return (
         <WizardConsumer>

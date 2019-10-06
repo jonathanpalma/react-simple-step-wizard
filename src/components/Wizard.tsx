@@ -9,7 +9,11 @@ const WizardPropTypes = {
   children(props: WizardProps, propName: string, componentName: string) {
     let error = null;
     React.Children.forEach(props[propName], (child: React.ReactElement) => {
-      if (![Navigator, StepTracker, Steps].some(component => component === child.type)) {
+      if (
+        ![Navigator, StepTracker, Steps].some(
+          component => component === child.type
+        )
+      ) {
         error = new Error(
           `${componentName} children should only include components of types Wizard.Navigator or Wizard.Steps`
         );
@@ -58,30 +62,40 @@ class Wizard extends React.PureComponent<WizardProps, WizardState> {
     children: WizardPropTypes.children,
   };
 
+  static defaultProps = {
+    children: [],
+  };
+
   componentDidUpdate(_: WizardProps, prevState: WizardState) {
     const { currentStep, totalSteps } = this.state;
     if (prevState.currentStep !== currentStep)
-      this.setState(
-        {
-          isNextAvailable: currentStep < totalSteps - 1,
-          isPrevAvailable: currentStep > 0,
-        },
-        () => {
-          const { onStepChange } = this.props;
-          if (onStepChange) onStepChange(currentStep);
-        }
-      );
+      this.handleStepChange(currentStep, totalSteps);
   }
 
+  handleStepChange = (currentStep: number, totalSteps: number) => {
+    this.setState(
+      {
+        isNextAvailable: currentStep < totalSteps - 1,
+        isPrevAvailable: currentStep > 0,
+      },
+      () => {
+        const { onStepChange } = this.props;
+        if (onStepChange) onStepChange(currentStep);
+      }
+    );
+  };
+
   nextStep = () => {
-    if (this.state.isNextAvailable)
+    const { isNextAvailable } = this.state;
+    if (isNextAvailable)
       this.setState(prevState => ({
         currentStep: prevState.currentStep + 1,
       }));
   };
 
   prevStep = () => {
-    if (this.state.isPrevAvailable)
+    const { isPrevAvailable } = this.state;
+    if (isPrevAvailable)
       this.setState(prevState => ({
         currentStep: prevState.currentStep - 1,
       }));
@@ -94,10 +108,11 @@ class Wizard extends React.PureComponent<WizardProps, WizardState> {
   });
 
   render() {
+    const { children } = this.props;
     return (
       <div>
         <WizardContext.Provider value={this.state}>
-          {this.props.children}
+          {children}
         </WizardContext.Provider>
       </div>
     );
