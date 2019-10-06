@@ -15,7 +15,7 @@
     "build": "rollup -c",
     "deploy": "gh-pages -d example/build",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
-    "precommit": "lint-staged",
+    "lint-staged": "lint-staged",
     "predeploy": "cd example && npm install && npm run build",
     "prepare": "npm run build",
     "prettier": "prettier \"src/**/*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|mdx)\"",
