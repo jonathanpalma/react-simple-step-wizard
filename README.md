@@ -10,11 +10,15 @@
 [![Install Size][size-badge]][package-size]
 [![Downloads][downloads-badge]][npmcharts]
 [![PRs Welcome][prs-badge]][prs]
-[![ISC License][license-badge]][license]
+[![MIT License][license-badge]][license]
 
 [![Watch on GitHub][github-watch-badge]][github-watch]
 [![Star on GitHub][github-star-badge]][github-star]
 [![Tweet][twitter-badge]][twitter]
+
+## Demo
+
+[Click here](https://jonathanpalma.github.io/react-simple-step-wizard/) to see a live demo!
 
 ## Getting Started
 
@@ -23,9 +27,6 @@
 ```
 npm install -S react-simple-step-wizard
 ```
-
-<!-- 
-This would be the desired API at least for v1, then it will support hooks and can change
 
 ### How to use it in your app?
 
@@ -38,47 +39,64 @@ const Step2 = () => <div>This is Step 2</div>;
 const Step3 = () => <div>This is Step 3</div>;
 const Step4 = () => <div>This is Step 4</div>;
 const Step5 = () => <div>This is Step 5</div>;
-const MyStepTracker = ({ currentStep, steps }) => <div>To be implemented</div>;
-const MyNavigator = ({ goToPreviousStep, goToNextStep }) => (
-  <div>To be implemented</div>
+const MyStepStracker = ({ currentStep = 0, steps = [] }) => (
+  <div>
+    <p>Current step is: {steps[currentStep]}</p>
+  </div>
+);
+const MyNavigator = ({
+  isNextAvailable,
+  isPrevAvailable,
+  nextStep,
+  prevStep,
+}) => (
+  <div>
+    {isPrevAvailable && (
+      <button type="button" onClick={prevStep}>
+        &lt; Back
+      </button>
+    )}
+    {isNextAvailable && (
+      <button type="button" onClick={nextStep}>
+        Next &gt;
+      </button>
+    )}
+  </div>
 );
 
 class App extends Component {
+  handleStepChange = currentStep => {
+    console.log(currentStep);
+  };
+
   render() {
     return (
       <div>
         <h1>react-simple-step-wizard demo</h1>
-        <Wizard>
-          <Wizard.StepTracker>
-            {({ currentStep, steps }) => (
-              <MyStepTracker currentStep={currentStep} steps={steps} />
-            )}
-          </Wizard.StepTracker>
-
-          <Wizard.Steps onStepChange={() => {}} isLoading={false}>
-            <Step1 />
-            <Step2 />
-            <Wizard.StepGroup>
-              <Step3 />
-              <Step4 />
-            </Wizard.StepGroup>
-            <Step5 />
+        <Wizard onStepChange={this.handleStepChange}>
+          <Wizard.StepTracker />
+          <Wizard.Steps>
+            <Step1 stepLabel="Search" />
+            <Step2 stepLabel="Select" />
+            <Step3 stepLabel="Customize" />
+            <Step4 stepLabel="Review" />
+            <Step5 stepLabel="Submit" />
           </Wizard.Steps>
-
+          {/* You can implement your custom components via render-props */}
+          <Wizard.StepTracker>
+            {stepTrackerProps => <MyStepStracker {...stepTrackerProps} />}
+          </Wizard.StepTracker>
           <Wizard.Navigator>
-            {({ goToPreviousStep, goToNextStep }) => (
-              <MyNavigator
-                goToPreviousStep={goToPreviousStep}
-                goToNextStep={goToNextStep}
-              />
-            )}
+            {navigatorProps => <MyNavigator {...navigatorProps} />}
           </Wizard.Navigator>
         </Wizard>
       </div>
     );
   }
 }
-``` -->
+
+export default App;
+```
 
 ## Roadmap
 
@@ -92,7 +110,7 @@ Rewrite lib core and expose some of the APIs using react hooks.
 
 ## License
 
-ISC Licensed.
+MIT © [jonathanpalma](https://github.com/jonathanpalma)
 
 [downloads-badge]: https://img.shields.io/npm/dm/react-simple-step-wizard.svg?style=flat-square
 [license-badge]: https://img.shields.io/npm/l/react-simple-step-wizard.svg?style=flat-square
