@@ -3,9 +3,10 @@
   "version": "0.0.2",
   "description": "React simple step wizard",
   "keywords": [
+    "multistep",
     "react",
-    "wizard",
-    "step wizard"
+    "step",
+    "wizard"
   ],
   "main": "lib/index.js",
   "module": "lib/index.es.js",
@@ -14,11 +15,13 @@
     "build": "rollup -c",
     "deploy": "gh-pages -d example/build",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "precommit": "lint-staged",
     "predeploy": "cd example && npm install && npm run build",
     "prepare": "npm run build",
     "prettier": "prettier \"src/**/*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|mdx)\"",
     "start": "rollup -c -w",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "validate": "npm run lint && npm run prettier -- --list-different"
   },
   "repository": {
     "type": "git",
@@ -49,6 +52,8 @@
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^2.1.2",
     "gh-pages": "^2.1.1",
+    "husky": "^3.0.8",
+    "lint-staged": "^9.4.1",
     "prettier": "^1.18.2",
     "react": "^16.3.0",
     "react-dom": "^16.3.0",
