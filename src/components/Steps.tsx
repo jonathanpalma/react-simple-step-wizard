@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as PropTypes from 'prop-types';
 import WizardContext from '../contexts/WizardContext';
 import { StepsProps } from '../common/types';
 
@@ -18,5 +19,12 @@ function Steps({ children }: StepsProps): JSX.Element {
     </WizardContext.Consumer>
   );
 }
+
+Steps.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]).isRequired,
+};
 
 export default Steps;
