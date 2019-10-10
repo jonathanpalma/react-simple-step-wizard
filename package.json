@@ -20,6 +20,7 @@
     "predeploy": "cd example && npm install && npm run build",
     "prepare": "npm run build",
     "prettier": "prettier \"src/**/*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|mdx)\"",
+    "release": "standard-version",
     "start": "rollup -c -w",
     "test": "echo \"Error: no test specified\" && exit 1",
     "validate": "npm run lint && npm run prettier -- --list-different"
@@ -72,6 +73,7 @@
     "rollup-plugin-postcss": "^2.0.3",
     "rollup-plugin-typescript2": "^0.24.3",
     "rollup-plugin-url": "^2.2.2",
+    "standard-version": "^7.0.0",
     "typescript": "^3.6.3",
     "utility-types": "^3.8.0"
   },
