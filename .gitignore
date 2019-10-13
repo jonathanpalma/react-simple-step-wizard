@@ -10,9 +10,8 @@ coverage
 build
 lib
 
-# lock-files
-/package-lock.json
-/yarn.lock
+# merge conflicts
+*.orig
 
 # misc
 .DS_Store
