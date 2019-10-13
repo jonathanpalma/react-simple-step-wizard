@@ -10,10 +10,6 @@ coverage
 build
 lib
 
-# lock-files
-/package-lock.json
-/yarn.lock
-
 # misc
 .DS_Store
 .env.local

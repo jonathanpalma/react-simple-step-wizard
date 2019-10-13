@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as PropTypes from 'prop-types';
 import { NavigatorProps } from '../common/types';
 
 function DefaultNavigator({
@@ -18,5 +19,12 @@ function DefaultNavigator({
     </div>
   );
 }
+
+DefaultNavigator.propTypes = {
+  isNextAvailable: PropTypes.bool.isRequired,
+  isPrevAvailable: PropTypes.bool.isRequired,
+  nextStep: PropTypes.func.isRequired,
+  prevStep: PropTypes.func.isRequired,
+};
 
 export default DefaultNavigator;

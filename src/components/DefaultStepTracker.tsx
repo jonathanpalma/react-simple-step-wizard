@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as PropTypes from 'prop-types';
 import { StepTrackerProps } from '../common/types';
 
 function DefaultStepTracker({
@@ -45,5 +46,15 @@ function DefaultStepTracker({
     </div>
   );
 }
+
+DefaultStepTracker.propTypes = {
+  currentStep: PropTypes.number,
+  steps: PropTypes.arrayOf(PropTypes.string),
+};
+
+DefaultStepTracker.defaultProps = {
+  currentStep: 0,
+  steps: [],
+};
 
 export default DefaultStepTracker;
