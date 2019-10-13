@@ -8,7 +8,7 @@ jobs:
       - checkout
       - run:
           name: Validate lockfile
-          command: npm run lockfile-lint
+          command: npx lockfile-lint --path package-lock.json --type npm --allowed-hosts npm
       - restore_cache:
           key: npm-cache-{{ checksum "package-lock.json" }}
       - run:
