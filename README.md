@@ -7,6 +7,7 @@
 <hr />
 
 [![Version][version-badge]][package]
+[![Build][build-badge]][build]
 [![Install Size][size-badge]][package-size]
 [![Downloads][downloads-badge]][npmcharts]
 [![PRs Welcome][prs-badge]][prs]
@@ -121,8 +122,10 @@ MIT © [jonathanpalma](https://github.com/jonathanpalma)
 [package]: https://www.npmjs.com/package/react-simple-step-wizard
 [prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
 [prs]: http://makeapullrequest.com
-[cz-badge]: (https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=flat-square)
-[cz]: (http://commitizen.github.io/cz-cli/)
+[build-badge]: https://img.shields.io/circleci/build/gh/jonathanpalma/react-simple-step-wizard?style=flat-square
+[build]: https://circleci.com/gh/jonathanpalma/react-simple-step-wizard
+[cz-badge]: https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=flat-square
+[cz]: http://commitizen.github.io/cz-cli/
 [size-badge]: https://flat.badgen.net/packagephobia/install/react-simple-step-wizard
 [version-badge]: https://img.shields.io/npm/v/react-simple-step-wizard.svg?style=flat-square
 [github-watch-badge]: https://img.shields.io/github/watchers/jonathanpalma/react-simple-step-wizard.svg?style=social
