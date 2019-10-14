@@ -18,6 +18,10 @@ export declare interface WizardHandlers {
   nextStep(): void;
 }
 
+export declare interface InjectedWizardProps {
+  wizard: WizardState;
+}
+
 export declare interface NavigatorProps {
   isNextAvailable: boolean;
   isPrevAvailable: boolean;

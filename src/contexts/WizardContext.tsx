@@ -1,6 +1,10 @@
 import * as React from 'react';
-import { Subtract } from 'utility-types';
-import { WizardState, WizardConsumerProps } from '../common/types';
+import hoistNonReactStatics from 'hoist-non-react-statics';
+import {
+  WizardState,
+  WizardConsumerProps,
+  InjectedWizardProps,
+} from '../common/types';
 
 const WizardContext = React.createContext<WizardState>({} as WizardState);
 
@@ -23,28 +27,31 @@ export function WizardConsumer({ children }: WizardConsumerProps): JSX.Element {
   );
 }
 
+/* 
+  TODO: Fix withWizard types to avoid the following error:
+  Argument of type 'typeof MyComponent' is not assignable
+  to parameter of type 'ComponentType<InjectedWizardProps>'
+  Type 'typeof MyComponent' is not assignable to type
+  'FunctionComponent<InjectedWizardProps>'
+*/
+
 // providing wizard context using higher-order component
-export function withWizardContext<T extends WizardState>(
-  WrappedComponent: React.ComponentType<T>
+export function withWizard<P extends InjectedWizardProps>(
+  Component: React.ComponentType<P>
 ) {
-  const getDisplayName = (wrappedComponent: React.ComponentType<T>) => {
-    return wrappedComponent.displayName || wrappedComponent.name || 'Component';
-  };
-
-  // eslint-disable-next-line react/prefer-stateless-function
-  return class extends React.Component<Subtract<T, WizardState>> {
-    static displayName = `WithWizardContext(${getDisplayName(
-      WrappedComponent
-    )})`;
-
-    render() {
-      return (
-        <WizardConsumer>
-          {context => <WrappedComponent {...(context as T)} />}
-        </WizardConsumer>
-      );
-    }
-  };
+  function Wrapper(
+    props: Omit<P, keyof InjectedWizardProps>,
+    ref: React.RefObject<unknown>
+  ) {
+    return (
+      <WizardConsumer>
+        {context => <Component ref={ref} wizard={context} {...(props as P)} />}
+      </WizardConsumer>
+    );
+  }
+  Wrapper.displayName = `withWizard(${Component.displayName ||
+    Component.name})`;
+  return hoistNonReactStatics(React.forwardRef(Wrapper), Component);
 }
 
 export default WizardContext;
