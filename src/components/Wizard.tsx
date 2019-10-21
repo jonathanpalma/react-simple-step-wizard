@@ -57,7 +57,6 @@ class Wizard extends React.PureComponent<WizardProps, WizardState> {
   static StepTracker = StepTracker;
   static Steps = Steps;
 
-  // custom prop-types
   static propTypes = {
     children: WizardPropTypes.children,
   };

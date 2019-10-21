@@ -1,30 +1,8 @@
-import * as React from 'react';
-import * as PropTypes from 'prop-types';
-import { isFunction } from 'util';
+import CustomNavigator from './CustomNavigator';
 import DefaultNavigator from './DefaultNavigator';
-import { WizardConsumer } from '../contexts/WizardContext';
-import { CustomNavigatorProps } from '../common/types';
 
-function Navigator({ children }: CustomNavigatorProps): JSX.Element {
-  return (
-    <WizardConsumer>
-      {context =>
-        children && isFunction(children) ? (
-          children(context)
-        ) : (
-          <React.Fragment />
-        )
-      }
-    </WizardConsumer>
-  );
+function Navigator({ children }: { children?: () => JSX.Element }) {
+  return children ? CustomNavigator({ children }) : DefaultNavigator();
 }
-
-Navigator.propTypes = {
-  children: PropTypes.func,
-};
-
-Navigator.defaultProps = {
-  children: DefaultNavigator,
-};
 
 export default Navigator;

@@ -29,8 +29,12 @@ export declare interface NavigatorProps {
   nextStep(): void;
 }
 
-export declare interface CustomNavigatorProps {
+export declare interface CompoundNavigatorProps {
   children?: (props: NavigatorProps) => JSX.Element;
+}
+
+export declare interface CustomNavigatorProps {
+  children: (props: NavigatorProps) => JSX.Element;
 }
 
 export declare interface StepTrackerProps {

@@ -6,7 +6,7 @@ const Step2 = () => <div>This is Step 2</div>;
 const Step3 = () => <div>This is Step 3</div>;
 const Step4 = () => <div>This is Step 4</div>;
 const Step5 = () => <div>This is Step 5</div>;
-const MyStepStracker = ({ currentStep = 0, steps = [] }) => (
+const MyStepTracker = ({ currentStep = 0, steps = [] }) => (
   <div>
     <p>Current step is: {steps[currentStep]}</p>
   </div>
@@ -18,16 +18,12 @@ const MyNavigator = ({
   prevStep,
 }) => (
   <div>
-    {isPrevAvailable && (
-      <button type="button" onClick={prevStep}>
-        &lt; Back
-      </button>
-    )}
-    {isNextAvailable && (
-      <button type="button" onClick={nextStep}>
-        Next &gt;
-      </button>
-    )}
+    <button type="button" onClick={prevStep} disabled={!isPrevAvailable}>
+      &lt; Back
+    </button>
+    <button type="button" onClick={nextStep} disabled={!isNextAvailable}>
+      Next &gt;
+    </button>
   </div>
 );
 
@@ -51,7 +47,7 @@ class App extends Component {
           </Wizard.Steps>
           {/* You can implement your custom components via render-props */}
           <Wizard.StepTracker>
-            {stepTrackerProps => <MyStepStracker {...stepTrackerProps} />}
+            {stepTrackerProps => <MyStepTracker {...stepTrackerProps} />}
           </Wizard.StepTracker>
           <Wizard.Navigator>
             {navigatorProps => <MyNavigator {...navigatorProps} />}
