@@ -42,8 +42,12 @@ export declare interface StepTrackerProps {
   steps: string[];
 }
 
-export declare interface CustomStepTrackerProps {
+export declare interface CompoundStepTrackerProps {
   children?: (props: StepTrackerProps) => JSX.Element;
+}
+
+export declare interface CustomStepTrackerProps {
+  children: (props: StepTrackerProps) => JSX.Element;
 }
 
 export declare interface StepsProps {

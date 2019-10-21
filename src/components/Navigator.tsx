@@ -1,7 +1,8 @@
 import CustomNavigator from './CustomNavigator';
 import DefaultNavigator from './DefaultNavigator';
+import { CompoundNavigatorProps } from '../common/types';
 
-function Navigator({ children }: { children?: () => JSX.Element }) {
+function Navigator({ children }: CompoundNavigatorProps) {
   return children ? CustomNavigator({ children }) : DefaultNavigator();
 }
 
