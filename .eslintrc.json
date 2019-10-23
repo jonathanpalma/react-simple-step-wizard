@@ -39,7 +39,8 @@
     "react/jsx-props-no-spreading": [
       "error",
       {
-        "custom": "ignore"
+        "custom": "ignore",
+        "exceptions": ["button"]
       }
     ],
     "react/sort-comp": [

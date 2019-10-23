@@ -4,12 +4,12 @@ import CustomNavigator from './CustomNavigator';
 function DefaultNavigator(): JSX.Element {
   return (
     <CustomNavigator>
-      {({ isNextAvailable, isPrevAvailable, nextStep, prevStep }) => (
+      {({ getNextStepProps, getPrevStepProps }) => (
         <div>
-          <button type="button" onClick={prevStep} disabled={!isPrevAvailable}>
+          <button type="button" {...getPrevStepProps()}>
             Previous
           </button>
-          <button type="button" onClick={nextStep} disabled={!isNextAvailable}>
+          <button type="button" {...getNextStepProps()}>
             Next
           </button>
         </div>

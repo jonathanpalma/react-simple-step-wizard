@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
 import Wizard from 'react-simple-step-wizard';
+import React, { Component } from 'react';
 
 const Step1 = () => <div>This is Step 1</div>;
 const Step2 = () => <div>This is Step 2</div>;
@@ -11,17 +11,20 @@ const MyStepTracker = ({ currentStep = 0, steps = [] }) => (
     <p>Current step is: {steps[currentStep]}</p>
   </div>
 );
-const MyNavigator = ({
-  isNextAvailable,
-  isPrevAvailable,
-  nextStep,
-  prevStep,
-}) => (
+const MyNavigator = ({ getNextStepProps, getPrevStepProps }) => (
   <div>
-    <button type="button" onClick={prevStep} disabled={!isPrevAvailable}>
+    <button
+      type="button"
+      {...getPrevStepProps({
+        onClick: () => {
+          console.log('Im going back');
+        },
+        type: 'submit',
+      })}
+    >
       &lt; Back
     </button>
-    <button type="button" onClick={nextStep} disabled={!isNextAvailable}>
+    <button type="button" {...getNextStepProps()}>
       Next &gt;
     </button>
   </div>

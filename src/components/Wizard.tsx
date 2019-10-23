@@ -3,7 +3,13 @@ import Navigator from './Navigator';
 import StepTracker from './StepTracker';
 import Steps from './Steps';
 import WizardContext from '../contexts/WizardContext';
-import { WizardProps, WizardState, WizardHandlers } from '../common/types';
+import {
+  WizardProps,
+  WizardState,
+  WizardHandlers,
+  WizardPropGetters,
+} from '../common/types';
+import callAll from '../common/callAll';
 
 const WizardPropTypes = {
   children(props: WizardProps, propName: string, componentName: string) {
@@ -25,7 +31,8 @@ const WizardPropTypes = {
 
 const getInitialState = (
   props: WizardProps,
-  handlers: WizardHandlers
+  handlers: WizardHandlers,
+  propGetters: WizardPropGetters
 ): WizardState => {
   let totalSteps = 0;
   let steps: string[] = [];
@@ -48,7 +55,7 @@ const getInitialState = (
     isPrevAvailable,
   };
 
-  return { ...state, ...handlers };
+  return { ...state, ...handlers, ...propGetters };
 };
 
 class Wizard extends React.PureComponent<WizardProps, WizardState> {
@@ -100,11 +107,50 @@ class Wizard extends React.PureComponent<WizardProps, WizardState> {
       }));
   };
 
+  getNextStepProps = (
+    props = { onClick: undefined }
+  ): React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > => {
+    const { isNextAvailable } = this.state;
+    return {
+      ...props,
+      type: 'button',
+      role: 'button',
+      disabled: !isNextAvailable,
+      onClick: callAll(props.onClick, this.nextStep),
+    };
+  };
+
+  getPrevStepProps = (
+    props = { onClick: undefined }
+  ): React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > => {
+    const { isPrevAvailable } = this.state;
+    return {
+      ...props,
+      type: 'button',
+      role: 'button',
+      disabled: !isPrevAvailable,
+      onClick: callAll(props.onClick, this.prevStep),
+    };
+  };
+
   // preventing unnecessary re-renders
-  state = getInitialState(this.props, {
-    nextStep: this.nextStep,
-    prevStep: this.prevStep,
-  });
+  state = getInitialState(
+    this.props,
+    {
+      nextStep: this.nextStep,
+      prevStep: this.prevStep,
+    },
+    {
+      getNextStepProps: this.getNextStepProps,
+      getPrevStepProps: this.getPrevStepProps,
+    }
+  );
 
   render() {
     const { children } = this.props;
