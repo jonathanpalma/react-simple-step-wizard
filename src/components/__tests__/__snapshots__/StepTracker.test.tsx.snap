@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StepTracker renders custom StepTracker 1`] = `
+<div>
+  <div>
+    <p>
+      Current step is: 
+    </p>
+  </div>
+</div>
+`;
+
+exports[`StepTracker renders default StepTracker 1`] = `
+<div>
+  <div
+    style="display: block; padding: 25px;"
+  >
+    <div
+      style="display: flex; flex-direction: row; justify-content: space-between;"
+    />
+  </div>
+</div>
+`;

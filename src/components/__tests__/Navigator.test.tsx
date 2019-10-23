@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { render } from '@testing-library/react';
-import Navigator from '../Navigator';
 import Wizard from '../Wizard';
 
 describe('Navigator', () => {
   it('renders custom Navigator', () => {
     const { container } = render(
       <Wizard>
-        <Navigator>
+        <Wizard.Navigator>
           {({
             getFirstStepProps,
             getLastStepProps,
@@ -29,7 +28,7 @@ describe('Navigator', () => {
               </button>
             </div>
           )}
-        </Navigator>
+        </Wizard.Navigator>
       </Wizard>
     );
 
@@ -39,7 +38,7 @@ describe('Navigator', () => {
   it('renders default Navigator', () => {
     const { container } = render(
       <Wizard>
-        <Navigator />
+        <Wizard.Navigator />
       </Wizard>
     );
 

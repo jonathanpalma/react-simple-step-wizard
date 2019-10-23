@@ -18,7 +18,7 @@
     "lint-staged": "lint-staged",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "lockfile-lint": "lockfile-lint --path package-lock.json --type npm --allowed-hosts npm",
-    "precommit": "npm run lint-staged && npm run lockfile-lint && npm run test",
+    "precommit": "npm run lint-staged && npm run lockfile-lint && npm run test -- --verbose",
     "dev": "concurrently \"npm run start\" \"npm run start --prefix ./example\"",
     "predeploy": "cd example && npm install && npm run build",
     "prepare": "npm run build",
