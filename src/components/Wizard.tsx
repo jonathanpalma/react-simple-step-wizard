@@ -3,13 +3,14 @@ import Navigator from './Navigator';
 import StepTracker from './StepTracker';
 import Steps from './Steps';
 import WizardContext from '../contexts/WizardContext';
+import callAll from '../common/callAll';
+import isInRange from '../common/isInRange';
 import {
   WizardProps,
   WizardState,
   WizardHandlers,
   WizardPropGetters,
 } from '../common/types';
-import callAll from '../common/callAll';
 
 const WizardPropTypes = {
   children(props: WizardProps, propName: string, componentName: string) {
@@ -91,6 +92,24 @@ class Wizard extends React.PureComponent<WizardProps, WizardState> {
     );
   };
 
+  goToStep = (step: number) => {
+    const { totalSteps } = this.state;
+    if (isInRange(step, 0, totalSteps)) {
+      this.setState({ currentStep: step });
+    } else {
+      console.error(`Step is out of the range [0, ${totalSteps - 1}]`);
+    }
+  };
+
+  firstStep = () => {
+    this.goToStep(0);
+  };
+
+  lastStep = () => {
+    const { totalSteps } = this.state;
+    this.goToStep(totalSteps - 1);
+  };
+
   nextStep = () => {
     const { isNextAvailable } = this.state;
     if (isNextAvailable)
@@ -107,6 +126,40 @@ class Wizard extends React.PureComponent<WizardProps, WizardState> {
       }));
   };
 
+  getFirstStepProps = (
+    props = { onClick: undefined }
+  ): React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > => {
+    const { isPrevAvailable } = this.state;
+    const { onClick, ...rest } = props;
+    return {
+      ...rest,
+      type: 'button',
+      role: 'button',
+      disabled: !isPrevAvailable,
+      onClick: callAll(onClick, this.firstStep),
+    };
+  };
+
+  getLastStepProps = (
+    props = { onClick: undefined }
+  ): React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > => {
+    const { isNextAvailable } = this.state;
+    const { onClick, ...rest } = props;
+    return {
+      ...rest,
+      type: 'button',
+      role: 'button',
+      disabled: !isNextAvailable,
+      onClick: callAll(onClick, this.lastStep),
+    };
+  };
+
   getNextStepProps = (
     props = { onClick: undefined }
   ): React.DetailedHTMLProps<
@@ -114,12 +167,13 @@ class Wizard extends React.PureComponent<WizardProps, WizardState> {
     HTMLButtonElement
   > => {
     const { isNextAvailable } = this.state;
+    const { onClick, ...rest } = props;
     return {
-      ...props,
+      ...rest,
       type: 'button',
       role: 'button',
       disabled: !isNextAvailable,
-      onClick: callAll(props.onClick, this.nextStep),
+      onClick: callAll(onClick, this.nextStep),
     };
   };
 
@@ -130,12 +184,13 @@ class Wizard extends React.PureComponent<WizardProps, WizardState> {
     HTMLButtonElement
   > => {
     const { isPrevAvailable } = this.state;
+    const { onClick, ...rest } = props;
     return {
-      ...props,
+      ...rest,
       type: 'button',
       role: 'button',
       disabled: !isPrevAvailable,
-      onClick: callAll(props.onClick, this.prevStep),
+      onClick: callAll(onClick, this.prevStep),
     };
   };
 
@@ -143,10 +198,15 @@ class Wizard extends React.PureComponent<WizardProps, WizardState> {
   state = getInitialState(
     this.props,
     {
+      firstStep: this.firstStep,
+      goToStep: this.goToStep,
+      lastStep: this.lastStep,
       nextStep: this.nextStep,
       prevStep: this.prevStep,
     },
     {
+      getFirstStepProps: this.getFirstStepProps,
+      getLastStepProps: this.getLastStepProps,
       getNextStepProps: this.getNextStepProps,
       getPrevStepProps: this.getPrevStepProps,
     }

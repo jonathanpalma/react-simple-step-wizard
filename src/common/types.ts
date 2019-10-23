@@ -18,11 +18,26 @@ export declare interface WizardProps {
 }
 
 export declare interface WizardHandlers {
-  prevStep(): void;
+  firstStep(): void;
+  goToStep(number: number): void;
+  lastStep(): void;
   nextStep(): void;
+  prevStep(): void;
 }
 
 export declare interface WizardPropGetters {
+  getFirstStepProps(
+    props?: unknown
+  ): React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  >;
+  getLastStepProps(
+    props?: unknown
+  ): React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  >;
   getNextStepProps(
     props?: unknown
   ): React.DetailedHTMLProps<

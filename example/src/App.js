@@ -11,21 +11,24 @@ const MyStepTracker = ({ currentStep = 0, steps = [] }) => (
     <p>Current step is: {steps[currentStep]}</p>
   </div>
 );
-const MyNavigator = ({ getNextStepProps, getPrevStepProps }) => (
+const MyNavigator = ({
+  getFirstStepProps,
+  getLastStepProps,
+  getNextStepProps,
+  getPrevStepProps,
+}) => (
   <div>
-    <button
-      type="button"
-      {...getPrevStepProps({
-        onClick: () => {
-          console.log('Im going back');
-        },
-        type: 'submit',
-      })}
-    >
+    <button type="button" {...getFirstStepProps()}>
+      &lt;&lt; First
+    </button>
+    <button type="button" {...getPrevStepProps()}>
       &lt; Back
     </button>
     <button type="button" {...getNextStepProps()}>
       Next &gt;
+    </button>
+    <button type="button" {...getLastStepProps()}>
+      Last &gt;&gt;
     </button>
   </div>
 );
