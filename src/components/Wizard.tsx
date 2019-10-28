@@ -22,7 +22,7 @@ const WizardPropTypes = {
         )
       ) {
         error = new Error(
-          `${componentName} children should only include components of types Wizard.Navigator or Wizard.Steps`
+          `Invalid prop \`children\` passed to \`${componentName}\`. Expected one of the following components \`Wizard.Navigator\`, \`Wizard.StepTracker\` or \`Wizard.Steps\``
         );
       }
     });
@@ -97,7 +97,9 @@ class Wizard extends React.PureComponent<WizardProps, WizardState> {
     if (isInRange(step, 0, totalSteps)) {
       this.setState({ currentStep: step });
     } else {
-      console.error(`Step is out of the range [0, ${totalSteps - 1}]`);
+      throw new Error(
+        `Step \`${step}\` is out of the range [0, ${totalSteps - 1}]`
+      );
     }
   };
 
