@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Navigator renders custom Navigator 1`] = `
+<div>
+  <div>
+    <button
+      disabled=""
+      role="button"
+      type="button"
+    >
+      &lt;&lt; First
+    </button>
+    <button
+      disabled=""
+      role="button"
+      type="button"
+    >
+      &lt; Back
+    </button>
+    <button
+      disabled=""
+      role="button"
+      type="button"
+    >
+      Next &gt;
+    </button>
+    <button
+      disabled=""
+      role="button"
+      type="button"
+    >
+      Last &gt;&gt;
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Navigator renders default Navigator 1`] = `
+<div>
+  <div>
+    <button
+      disabled=""
+      role="button"
+      type="button"
+    >
+      Previous
+    </button>
+    <button
+      disabled=""
+      role="button"
+      type="button"
+    >
+      Next
+    </button>
+  </div>
+</div>
+`;

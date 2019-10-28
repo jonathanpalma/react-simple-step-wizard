@@ -10,6 +10,9 @@ coverage
 build
 lib
 
+# merge conflicts
+*.orig
+
 # misc
 .DS_Store
 .env.local

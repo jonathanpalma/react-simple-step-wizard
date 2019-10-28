@@ -18,7 +18,8 @@
     "lint-staged": "lint-staged",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "lockfile-lint": "lockfile-lint --path package-lock.json --type npm --allowed-hosts npm",
-    "precommit": "npm run lint-staged && npm run lockfile-lint && npm run test",
+    "precommit": "npm run lint-staged && npm run lockfile-lint && npm run test -- --verbose",
+    "dev": "concurrently \"npm run start\" \"npm run start --prefix ./example\"",
     "predeploy": "cd example && npm install && npm run build",
     "prepare": "npm run build",
     "prettier": "prettier \"src/**/*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|mdx)\"",
@@ -49,12 +50,14 @@
     "@svgr/rollup": "^4.3.3",
     "@testing-library/jest-dom": "^4.1.2",
     "@testing-library/react": "^9.3.0",
+    "@types/hoist-non-react-statics": "^3.3.1",
     "@types/jest": "^24.0.18",
     "@types/prop-types": "^15.7.3",
     "@types/react": "^16.9.3",
     "@types/react-dom": "^16.9.1",
     "@typescript-eslint/eslint-plugin": "^2.3.0",
     "@typescript-eslint/parser": "^2.3.0",
+    "concurrently": "^5.0.0",
     "cz-conventional-changelog": "^3.0.2",
     "eslint": "^6.5.1",
     "eslint-config-airbnb": "^18.0.1",
@@ -66,6 +69,7 @@
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^2.1.2",
     "gh-pages": "^2.1.1",
+    "hoist-non-react-statics": "^3.3.0",
     "husky": "^3.0.8",
     "jest": "^24.9.0",
     "lint-staged": "^9.4.1",
@@ -84,8 +88,7 @@
     "rollup-plugin-url": "^2.2.2",
     "standard-version": "^7.0.0",
     "ts-jest": "^24.1.0",
-    "typescript": "^3.6.3",
-    "utility-types": "^3.8.0"
+    "typescript": "^3.6.3"
   },
   "config": {
     "commitizen": {
