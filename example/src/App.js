@@ -6,6 +6,7 @@ const Step2 = () => <div>This is Step 2</div>;
 const Step3 = () => <div>This is Step 3</div>;
 const Step4 = () => <div>This is Step 4</div>;
 const Step5 = () => <div>This is Step 5</div>;
+const Step6 = () => <div>This is Step 6</div>;
 const MyStepTracker = ({ currentStep = 0, steps = [] }) => (
   <div>
     <p>Current step is: {steps[currentStep]}</p>
@@ -64,7 +65,10 @@ class App extends Component {
             <Step2 stepLabel="Select" />
             <Step3 stepLabel="Customize" stepCondition={isCustomizeVisible} />
             <Step4 stepLabel="Review" />
-            <Step5 stepLabel="Submit" />
+            <Wizard.StepGroup stepLabel="Submit">
+              <Step5 />
+              <Step6 />
+            </Wizard.StepGroup>
           </Wizard.Steps>
           {/* You can implement your custom components via render-props */}
           <Wizard.StepTracker>

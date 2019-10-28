@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Navigator from './Navigator';
+import StepGroup from './StepGroup';
 import StepTracker from './StepTracker';
 import Steps from './Steps';
 import WizardContext from '../contexts/WizardContext';
@@ -54,6 +55,7 @@ const getInitialState = (
 class Wizard extends React.PureComponent<WizardProps, WizardState> {
   // compound components
   static Navigator = Navigator;
+  static StepGroup = StepGroup;
   static StepTracker = StepTracker;
   static Steps = Steps;
 

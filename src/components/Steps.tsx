@@ -13,7 +13,12 @@ function Steps({ children }: StepsProps): JSX.Element {
         context.totalSteps > 0
           ? React.Children.map(ValidSteps, (child: React.ReactElement, index) =>
               context.currentStep === index
-                ? React.cloneElement(child, {})
+                ? React.cloneElement(child, {
+                    wizard: {
+                      nexStep: context.nextStep,
+                      prevStep: context.prevStep,
+                    },
+                  })
                 : null
             )
           : null
