@@ -35,9 +35,14 @@ const getInitialState = (
   handlers: WizardHandlers,
   propGetters: WizardPropGetters
 ): WizardState => {
+  let instances = 0;
   let totalSteps = 0;
   let steps: string[] = [];
   React.Children.forEach(props.children, child => {
+    instances = Steps === child.type ? instances + 1 : instances;
+    if (instances > 1) {
+      throw new Error(`Wizard must only have a single component of type Steps`);
+    }
     if (child.type === Steps && child.props.children) {
       totalSteps = child.props.children.length;
       React.Children.forEach(child.props.children, step => {
@@ -72,19 +77,6 @@ class Wizard extends React.PureComponent<WizardProps, WizardState> {
   static defaultProps = {
     children: [],
   };
-
-  componentDidMount() {
-    const { children } = this.props;
-    let instances = 0;
-    React.Children.forEach(children, (child: React.ReactElement) => {
-      instances = Steps === child.type ? instances + 1 : instances;
-      if (instances > 1) {
-        throw new Error(
-          `Wizard must only have a single component of type Steps`
-        );
-      }
-    });
-  }
 
   componentDidUpdate(_: WizardProps, prevState: WizardState) {
     const { currentStep, totalSteps } = this.state;
