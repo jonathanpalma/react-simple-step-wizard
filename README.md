@@ -1,7 +1,7 @@
 <div align="center">
   <h1>react-simple-step-wizard 🧙</h1>
 
-  <p>A simple and composable step wizard in React!</p>
+  <p>A simple and composable step wizard in React! Made with ❤ in El Salvador 🇸🇻</p>
 </div>
 
 <hr />
@@ -24,69 +24,90 @@
 
 ## Getting Started
 
-### How to install it in your app?
+### Installation
 
 ```
 npm install -S react-simple-step-wizard
 ```
 
-### How to use it in your app?
+### Usage
 
 ```javascript
-import React, { Component } from 'react';
 import Wizard from 'react-simple-step-wizard';
+import React, { Component } from 'react';
 
 const Step1 = () => <div>This is Step 1</div>;
 const Step2 = () => <div>This is Step 2</div>;
 const Step3 = () => <div>This is Step 3</div>;
 const Step4 = () => <div>This is Step 4</div>;
 const Step5 = () => <div>This is Step 5</div>;
-const MyStepStracker = ({ currentStep = 0, steps = [] }) => (
+const Step6 = () => <div>This is Step 6</div>;
+const MyStepTracker = ({ currentStep = 0, steps = [] }) => (
   <div>
     <p>Current step is: {steps[currentStep]}</p>
   </div>
 );
 const MyNavigator = ({
-  isNextAvailable,
-  isPrevAvailable,
-  nextStep,
-  prevStep,
+  getFirstStepProps,
+  getLastStepProps,
+  getNextStepProps,
+  getPrevStepProps,
 }) => (
   <div>
-    {isPrevAvailable && (
-      <button type="button" onClick={prevStep}>
-        &lt; Back
-      </button>
-    )}
-    {isNextAvailable && (
-      <button type="button" onClick={nextStep}>
-        Next &gt;
-      </button>
-    )}
+    <button type="button" {...getFirstStepProps()}>
+      &lt;&lt; First
+    </button>
+    <button type="button" {...getPrevStepProps()}>
+      &lt; Back
+    </button>
+    <button type="button" {...getNextStepProps()}>
+      Next &gt;
+    </button>
+    <button type="button" {...getLastStepProps()}>
+      Last &gt;&gt;
+    </button>
   </div>
 );
 
 class App extends Component {
+  state = { isCustomizeVisible: true };
+
   handleStepChange = currentStep => {
     console.log(currentStep);
   };
 
+  onClick = () => {
+    this.setState(prevState => ({
+      isCustomizeVisible: !prevState.isCustomizeVisible,
+    }));
+  };
+
   render() {
+    const { isCustomizeVisible } = this.state;
     return (
       <div>
         <h1>react-simple-step-wizard demo</h1>
+        <div>
+          <p>Step 3 visible: {isCustomizeVisible.toString()}</p>
+          <button type="button" onClick={this.onClick}>
+            Toggle Step 3
+          </button>
+        </div>
         <Wizard onStepChange={this.handleStepChange}>
           <Wizard.StepTracker />
           <Wizard.Steps>
             <Step1 stepLabel="Search" />
             <Step2 stepLabel="Select" />
-            <Step3 stepLabel="Customize" />
+            <Step3 stepLabel="Customize" stepCondition={isCustomizeVisible} />
             <Step4 stepLabel="Review" />
-            <Step5 stepLabel="Submit" />
+            <Wizard.StepGroup stepLabel="Submit">
+              <Step5 />
+              <Step6 />
+            </Wizard.StepGroup>
           </Wizard.Steps>
           {/* You can implement your custom components via render-props */}
           <Wizard.StepTracker>
-            {stepTrackerProps => <MyStepStracker {...stepTrackerProps} />}
+            {stepTrackerProps => <MyStepTracker {...stepTrackerProps} />}
           </Wizard.StepTracker>
           <Wizard.Navigator>
             {navigatorProps => <MyNavigator {...navigatorProps} />}
