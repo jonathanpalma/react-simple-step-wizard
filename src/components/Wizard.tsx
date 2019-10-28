@@ -11,6 +11,7 @@ import {
   WizardHandlers,
   WizardPropGetters,
 } from '../common/types';
+import getWizardSteps from '../common/getWizardSteps';
 
 const WizardPropTypes = {
   children(props: WizardProps, propName: string, componentName: string) {
@@ -35,22 +36,8 @@ const getInitialState = (
   handlers: WizardHandlers,
   propGetters: WizardPropGetters
 ): WizardState => {
-  let instances = 0;
-  let totalSteps = 0;
-  let steps: string[] = [];
-  React.Children.forEach(props.children, child => {
-    instances = Steps === child.type ? instances + 1 : instances;
-    if (instances > 1) {
-      throw new Error(`Wizard must only have a single component of type Steps`);
-    }
-    if (child.type === Steps && child.props.children) {
-      totalSteps = child.props.children.length;
-      React.Children.forEach(child.props.children, step => {
-        steps = steps.concat(step.props.stepLabel);
-      });
-    }
-  });
   const currentStep = 0;
+  const { steps, totalSteps } = getWizardSteps(props.children);
   const isNextAvailable = currentStep < totalSteps - 1;
   const isPrevAvailable = currentStep > 0;
   const state = {
@@ -78,11 +65,31 @@ class Wizard extends React.PureComponent<WizardProps, WizardState> {
     children: [],
   };
 
-  componentDidUpdate(_: WizardProps, prevState: WizardState) {
+  componentDidUpdate(prevProps: WizardProps, prevState: WizardState) {
+    const { children } = this.props;
     const { currentStep, totalSteps } = this.state;
-    if (prevState.currentStep !== currentStep)
+    if (prevProps.children !== children)
+      this.handleChildrenChange(children, currentStep);
+    if (
+      prevState.currentStep !== currentStep ||
+      prevState.totalSteps !== totalSteps
+    )
       this.handleStepChange(currentStep, totalSteps);
   }
+
+  handleChildrenChange = (
+    children: JSX.Element | JSX.Element[],
+    currentStep: number
+  ) => {
+    const { totalSteps, ...rest } = getWizardSteps(children);
+    this.setState({
+      currentStep: isInRange(currentStep, 0, totalSteps)
+        ? currentStep
+        : totalSteps - 1,
+      totalSteps,
+      ...rest, // avoiding react/no-unused-state lol
+    });
+  };
 
   handleStepChange = (currentStep: number, totalSteps: number) => {
     this.setState(

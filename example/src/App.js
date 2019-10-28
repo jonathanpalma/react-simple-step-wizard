@@ -34,20 +34,35 @@ const MyNavigator = ({
 );
 
 class App extends Component {
+  state = { isCustomizeVisible: true };
+
   handleStepChange = currentStep => {
     console.log(currentStep);
   };
 
+  onClick = () => {
+    this.setState(prevState => ({
+      isCustomizeVisible: !prevState.isCustomizeVisible,
+    }));
+  };
+
   render() {
+    const { isCustomizeVisible } = this.state;
     return (
       <div>
         <h1>react-simple-step-wizard demo</h1>
+        <div>
+          <p>Step 3 visible: {isCustomizeVisible.toString()}</p>
+          <button type="button" onClick={this.onClick}>
+            Toggle Step 3
+          </button>
+        </div>
         <Wizard onStepChange={this.handleStepChange}>
           <Wizard.StepTracker />
           <Wizard.Steps>
             <Step1 stepLabel="Search" />
             <Step2 stepLabel="Select" />
-            <Step3 stepLabel="Customize" />
+            <Step3 stepLabel="Customize" stepCondition={isCustomizeVisible} />
             <Step4 stepLabel="Review" />
             <Step5 stepLabel="Submit" />
           </Wizard.Steps>

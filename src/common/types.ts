@@ -3,14 +3,16 @@ interface WizardBooleans {
   isPrevAvailable: boolean;
 }
 
-interface WizardSteps {
+interface WizardStepsBase {
   currentStep: number;
   steps: string[];
 }
 
-interface WizardStateWithoutHelpers extends WizardBooleans, WizardSteps {
+export declare interface WizardSteps extends WizardStepsBase {
   totalSteps: number;
 }
+
+interface WizardStateWithoutHelpers extends WizardBooleans, WizardSteps {}
 
 export declare interface WizardProps {
   children: JSX.Element[] | JSX.Element;
@@ -74,7 +76,7 @@ export declare interface CustomNavigatorProps {
 
 // StepTracker
 
-export declare interface StepTrackerProps extends WizardSteps {}
+export declare interface StepTrackerProps extends WizardStepsBase {}
 
 export declare interface CompoundStepTrackerProps {
   children?: (props: StepTrackerProps) => JSX.Element;
