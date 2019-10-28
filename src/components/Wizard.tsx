@@ -22,7 +22,7 @@ const WizardPropTypes = {
         )
       ) {
         error = new Error(
-          `Invalid prop \`children\` passed to \`${componentName}\`. Expected one of the following components \`Wizard.Navigator\`, \`Wizard.StepTracker\` or \`Wizard.Steps\``
+          `Invalid prop \`children\` passed to \`${componentName}\`. Expected one of the following components \`Navigator\`, \`StepTracker\` or \`Steps\``
         );
       }
     });
@@ -72,6 +72,19 @@ class Wizard extends React.PureComponent<WizardProps, WizardState> {
   static defaultProps = {
     children: [],
   };
+
+  componentDidMount() {
+    const { children } = this.props;
+    let instances = 0;
+    React.Children.forEach(children, (child: React.ReactElement) => {
+      instances = Steps === child.type ? instances + 1 : instances;
+      if (instances > 1) {
+        throw new Error(
+          `Wizard must only have a single component of type Steps`
+        );
+      }
+    });
+  }
 
   componentDidUpdate(_: WizardProps, prevState: WizardState) {
     const { currentStep, totalSteps } = this.state;

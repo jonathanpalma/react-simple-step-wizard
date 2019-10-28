@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Steps renders Steps 1`] = `
+<div>
+  <div>
+    This is Step 1
+  </div>
+</div>
+`;
