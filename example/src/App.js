@@ -1,5 +1,5 @@
-import Wizard from 'react-simple-step-wizard';
 import React, { Component } from 'react';
+import Wizard from 'react-simple-step-wizard';
 
 const Step1 = () => <div>This is Step 1</div>;
 const Step2 = () => <div>This is Step 2</div>;
@@ -17,31 +17,29 @@ const MyNavigator = ({
   getLastStepProps,
   getNextStepProps,
   getPrevStepProps,
+  getResetProps,
 }) => (
   <div>
-    <button type="button" {...getFirstStepProps()}>
-      &lt;&lt; First
-    </button>
-    <button type="button" {...getPrevStepProps()}>
-      &lt; Back
-    </button>
-    <button type="button" {...getNextStepProps()}>
-      Next &gt;
-    </button>
-    <button type="button" {...getLastStepProps()}>
-      Last &gt;&gt;
-    </button>
+    <button {...getFirstStepProps()}>&lt;&lt; First</button>
+    <button {...getPrevStepProps()}>&lt; Back</button>
+    <button {...getResetProps()}>Reset</button>
+    <button {...getNextStepProps()}>Next &gt;</button>
+    <button {...getLastStepProps()}>Last &gt;&gt;</button>
   </div>
 );
 
 class App extends Component {
   state = { isCustomizeVisible: true };
 
-  handleStepChange = currentStep => {
-    console.log(currentStep);
+  onStepChange = currentStep => {
+    console.log('Step changed', currentStep);
   };
 
-  onClick = () => {
+  onReset = currentStep => {
+    console.log('Reset', currentStep);
+  };
+
+  toggleCustomizeVisibility = () => {
     this.setState(prevState => ({
       isCustomizeVisible: !prevState.isCustomizeVisible,
     }));
@@ -53,12 +51,14 @@ class App extends Component {
       <div>
         <h1>react-simple-step-wizard demo</h1>
         <div>
-          <p>Step 3 visible: {isCustomizeVisible.toString()}</p>
-          <button type="button" onClick={this.onClick}>
-            Toggle Step 3
+          <p>
+            Step &quot;Customize&quot; visible: {isCustomizeVisible.toString()}
+          </p>
+          <button type="button" onClick={this.toggleCustomizeVisibility}>
+            Toggle Customize Step
           </button>
         </div>
-        <Wizard onStepChange={this.handleStepChange}>
+        <Wizard initialStep={4} onStepChange={this.onStepChange}>
           <Wizard.StepTracker />
           <Wizard.Steps>
             <Step1 stepLabel="Search" />

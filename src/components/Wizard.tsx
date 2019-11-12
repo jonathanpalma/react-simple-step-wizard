@@ -5,6 +5,8 @@ import StepTracker from './StepTracker';
 import Steps from './Steps';
 import WizardContext from '../contexts/WizardContext';
 import callAll from '../common/callAll';
+import getWizardSteps from '../common/getWizardSteps';
+import IndexOutOfRangeError from '../common/IndexOutOfRangeError';
 import isInRange from '../common/isInRange';
 import {
   WizardProps,
@@ -12,7 +14,6 @@ import {
   WizardHandlers,
   WizardPropGetters,
 } from '../common/types';
-import getWizardSteps from '../common/getWizardSteps';
 
 const WizardPropTypes = {
   children(props: WizardProps, propName: string, componentName: string) {
@@ -37,8 +38,10 @@ const getInitialState = (
   handlers: WizardHandlers,
   propGetters: WizardPropGetters
 ): WizardState => {
-  const currentStep = 0;
   const { steps, totalSteps } = getWizardSteps(props.children);
+  const currentStep = props.initialStep || 0;
+  if (!isInRange(currentStep, 0, totalSteps))
+    throw new IndexOutOfRangeError(currentStep, 0, totalSteps);
   const isNextAvailable = currentStep < totalSteps - 1;
   const isPrevAvailable = currentStep > 0;
   const state = {
@@ -111,9 +114,7 @@ class Wizard extends React.PureComponent<WizardProps, WizardState> {
     if (isInRange(step, 0, totalSteps)) {
       this.setState({ currentStep: step });
     } else {
-      throw new Error(
-        `Step \`${step}\` is out of the range [0, ${totalSteps - 1}]`
-      );
+      throw new IndexOutOfRangeError(step, 0, totalSteps);
     }
   };
 
@@ -140,6 +141,21 @@ class Wizard extends React.PureComponent<WizardProps, WizardState> {
       this.setState(prevState => ({
         currentStep: prevState.currentStep - 1,
       }));
+  };
+
+  reset = (): void => {
+    const { initialStep = 0, onReset } = this.props;
+    const { currentStep, totalSteps } = this.state;
+    if (!isInRange(initialStep, 0, totalSteps))
+      throw new IndexOutOfRangeError(initialStep, 0, totalSteps);
+    this.setState(
+      {
+        currentStep: initialStep,
+      },
+      () => {
+        if (onReset) onReset(currentStep);
+      }
+    );
   };
 
   getFirstStepProps = (
@@ -210,6 +226,21 @@ class Wizard extends React.PureComponent<WizardProps, WizardState> {
     };
   };
 
+  getResetProps = (
+    props = { onClick: undefined }
+  ): React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > => {
+    const { onClick, ...rest } = props;
+    return {
+      ...rest,
+      type: 'button',
+      role: 'button',
+      onClick: callAll(onClick, this.reset),
+    };
+  };
+
   // preventing unnecessary re-renders
   state = getInitialState(
     this.props,
@@ -219,12 +250,14 @@ class Wizard extends React.PureComponent<WizardProps, WizardState> {
       lastStep: this.lastStep,
       nextStep: this.nextStep,
       prevStep: this.prevStep,
+      reset: this.reset,
     },
     {
       getFirstStepProps: this.getFirstStepProps,
       getLastStepProps: this.getLastStepProps,
       getNextStepProps: this.getNextStepProps,
       getPrevStepProps: this.getPrevStepProps,
+      getResetProps: this.getResetProps,
     }
   );
 

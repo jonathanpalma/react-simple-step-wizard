@@ -16,7 +16,9 @@ interface WizardStateWithoutHelpers extends WizardBooleans, WizardSteps {}
 
 export declare interface WizardProps {
   children: JSX.Element[] | JSX.Element;
+  initialStep?: number;
   onStepChange?: (currentStep: number) => void;
+  onReset?: (currentStep: number) => void;
 }
 
 export declare interface WizardHandlers {
@@ -25,6 +27,7 @@ export declare interface WizardHandlers {
   lastStep(): void;
   nextStep(): void;
   prevStep(): void;
+  reset(): void;
 }
 
 export declare interface WizardPropGetters {
@@ -47,6 +50,12 @@ export declare interface WizardPropGetters {
     HTMLButtonElement
   >;
   getPrevStepProps(
+    props?: unknown
+  ): React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  >;
+  getResetProps(
     props?: unknown
   ): React.DetailedHTMLProps<
     React.ButtonHTMLAttributes<HTMLButtonElement>,
