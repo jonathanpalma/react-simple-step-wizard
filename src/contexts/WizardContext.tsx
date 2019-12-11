@@ -13,10 +13,7 @@ export function WizardConsumer({ children }: WizardConsumerProps): JSX.Element {
   return (
     <WizardContext.Consumer>
       {context => {
-        if (
-          Object.entries(context).length === 0 &&
-          context.constructor === Object
-        ) {
+        if (!context) {
           throw new Error(
             'Components using WizardContext must be rendered within the Wizard component'
           );
@@ -25,6 +22,17 @@ export function WizardConsumer({ children }: WizardConsumerProps): JSX.Element {
       }}
     </WizardContext.Consumer>
   );
+}
+
+// providing wizard context using hooks
+export function useWizard() {
+  const context = React.useContext(WizardContext);
+  if (!context) {
+    throw new Error(
+      'Components using WizardContext must be rendered within the Wizard component'
+    );
+  }
+  return context;
 }
 
 /* 
